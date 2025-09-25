@@ -1,64 +1,65 @@
-# ☁️ Skysikkerhet – Eksamensprosjekt
+# ☁️ Skysikkerhet – Konte Eksamen
 
-Dette repoet inneholder en eksamensbesvarelse fra faget **Skysikkerhet** ved Høyskolen Kristiania.  
-Oppgaven tok for seg migrering av en legacy-applikasjon til skyen, med fokus på **kostnadseffektivitet, fleksibilitet og sikkerhet**.
+Dette repoet inneholder eksamensbesvarelsen min i **Skysikkerhet** ved Høyskolen Kristiania.  
+Oppgaven tok for seg migrering av en legacy-applikasjon til skyen med fokus på **sikkerhet, skalerbarhet og kostnadseffektivitet**.
 
-📌 **Karakter: A** – Besvarelsen ble vurdert til toppkarakter.  
+📌 **Karakter: A** – Prosjektet ble vurdert til toppkarakter.  
 
 ---
 
 ## 📑 Innhold
 
-- **Migreringsstrategi**  
-  - Valgt løsning: *Lift and Shift* (Rehost)  
-  - Begrunnelse: Stram tidsramme, begrenset budsjett, og krav til å beholde legacy-applikasjonen  
+- **Migrasjonsstrategi**  
+  - Valgt: **Rehost (Lift-and-Shift)** til Google Compute Engine  
+  - Begrunnelse: Rask implementering, lav risiko og budsjettvennlig løsning  
 
 - **Cloud-modell**  
-  - Valgt: *Infrastructure-as-a-Service (IaaS)*  
-  - Gir kontroll over applikasjoner og OS, men skyfordeler som skalerbarhet og kostnadseffektivitet  
+  - Valgt: **IaaS**  
+  - Full kontroll over infrastruktur, enkel lift-and-shift og fleksibilitet for fremtidige optimaliseringer  
 
-- **Deploy-region**  
-  - GCP europe-north1 (Finland)  
-  - Lav latency for norske brukere, i tråd med GDPR  
-
-- **Infrastruktur og skalerbarhet**  
-  - Bygget med Terraform (Infrastructure as Code)  
-  - Lastbalansering for høy tilgjengelighet og fleksibilitet  
-  - Backup og recovery via automatiserte snapshots  
+- **Infrastruktur** (Terraform)  
+  - Globalt VPC-nettverk med subnett i Europa, Nord-Amerika, Asia og Australia  
+  - Instance Templates og Instance Groups per region  
+  - Autoskalering i Europa og Nord-Amerika basert på CPU-belastning  
+  - Global HTTPS Lastbalanserer med SSL-sertifikater (Google Managed SSL)  
+  - Backup-policyer med snapshots per region (7-dagers retention)  
 
 - **Sikkerhetstiltak**  
-  - Web Application Firewall (Google Cloud Armor) med regler mot SQLi og XSS  
-  - Isolert VPC med brannmurregler (kun HTTP/HTTPS)  
-  - VPC Flow Logs for overvåking  
-  - Integrasjon med SIEM (Splunk) via Cloud Logging + Dataflow  
+  - Web Application Firewall (Google Cloud Armor) med regler mot SQLi, XSS, LFI og RCE  
+  - Rate limiting for å forhindre brute-force og DoS-forsøk  
+  - VPC Flow Logs for innsikt i trafikk og hendelser  
+  - Granulære brannmurregler med minst mulig eksponering  
+  - CloudFlare-integrasjon for DDoS-beskyttelse og proxy  
 
-- **DevSecOps og beste praksis**  
-  - Sikkerhet implementert fra start gjennom IaC og tfsec-analyse  
-  - Automatisering og overvåking for kontinuerlig forbedring  
-  - Fokus på delt ansvar mellom kunde og skyleverandør  
+- **CI/CD med GitHub Actions**  
+  - Pipeline for å kjøre `gitleaks`, `tfsec`, `terraform fmt`, `terraform validate` og `terraform plan` på hver push  
+  - Manuell godkjenning for `terraform apply` og `terraform destroy`  
+  - Sikker håndtering av credentials via GitHub Secrets  
 
 ---
 
 ## 🛠️ Teknologier og verktøy
 
-- Google Cloud Platform (GCP)  
-- Terraform  
-- Google Cloud Armor (WAF)  
-- Splunk (SIEM-integrasjon)  
-- Tfsec (kode-sikkerhetsanalyse)  
+- **Google Cloud Platform (GCP)**  
+- **Terraform** (Infrastructure as Code)  
+- **GitHub Actions** (CI/CD)  
+- **tfsec** (Terraform security scanning)  
+- **Gitleaks** (secret scanning)  
+- **Cloud Armor / Cloud Logging / VPC Flow Logs**  
+- **CloudFlare** (proxy + DDoS-beskyttelse)  
 
 ---
 
 ## 📈 Læringsutbytte
 
-- Praktisk erfaring med **migreringsstrategier til skyen**  
-- Implementering av en **sikker og skalerbar infrastruktur med Terraform**  
-- Innsikt i **delt ansvar, DevSecOps og SIEM-integrasjon**  
-- Evne til å vurdere fordeler, ulemper og sikkerhetsutfordringer i skytjenester  
+- Design og implementasjon av en **sikker og skalerbar skyløsning** i GCP  
+- Automatisering med **Terraform** og **GitHub Actions**  
+- Bruk av **best practices** innen DevSecOps, logging og sikkerhet  
+- Dokumentasjon og risikovurdering av valg (IaaS, lift-and-shift, sikkerhetstiltak)  
 
 ---
 
 ## 📜 Lisens
 
 Dette prosjektet er laget som en del av eksamen i **Skysikkerhet** ved Høyskolen Kristiania.  
-Koden og dokumentasjonen kan fritt brukes til læringsformål.
+Repoet er kun til bruk i lærings- og demonstrasjonsøyemed.
